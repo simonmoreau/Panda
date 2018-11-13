@@ -8,6 +8,9 @@ import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
+  
+  pdfSrc: string =  '/pdf-test.pdf';
+  
   /** Based on the screen size, switch from standard to one column per row */
   cards = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
     map(({ matches }) => {
@@ -30,4 +33,22 @@ export class HomeComponent {
   );
 
   constructor(private breakpointObserver: BreakpointObserver) {}
+
+  onFileInput($event) : void {
+    this.ReadPDF($event.target);
+  }
+  
+  ReadPDF(inputValue: any) {
+    let file = inputValue.files[0];
+  
+    if (typeof (FileReader) !== 'undefined') {
+      let reader = new FileReader();
+  
+      reader.onload = (e: any) => {
+        this.pdfSrc = e.target.result;
+      };
+  
+      reader.readAsArrayBuffer(file);
+    }
+  }
 }
